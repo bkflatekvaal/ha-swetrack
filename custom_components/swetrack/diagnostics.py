@@ -75,6 +75,7 @@ async def async_get_config_entry_diagnostics(
                 "request_count": coordinator.request_count,
                 "requests_remaining": coordinator.requests_remaining,
                 "reset_at": coordinator.reset_at,
+                "device_count": coordinator.device_count,
                 "headers": coordinator.last_headers,
                 "payload": coordinator.last_raw_payload,
             },

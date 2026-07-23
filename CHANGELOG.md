@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+- Shortened parent device name to `SweTrack – <account>`
+- Renamed API diagnostic entities for clearer display
+- Added tracker count and account language
+- Kept all account sensors in the Diagnostic category
+
 ## 0.2.1
 
 - Added repository-level `brand/` assets for HACS

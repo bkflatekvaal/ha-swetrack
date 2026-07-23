@@ -10,6 +10,7 @@ from .api import SweTrackApiClient
 from .const import (
     API_BASE_URL,
     CONF_ACCOUNT_ID,
+    CONF_ACCOUNT_LANGUAGE,
     CONF_ACCOUNT_NAME,
     CONF_API_KEY,
     DOMAIN,
@@ -28,7 +29,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     if CONF_ACCOUNT_ID not in entry.data:
         account = await api.async_get_account()
-        account_id, account_name = derive_account_identity(
+        account_id, account_name, account_language = derive_account_identity(
             account.data, entry.data[CONF_API_KEY]
         )
         hass.config_entries.async_update_entry(
@@ -37,6 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 **entry.data,
                 CONF_ACCOUNT_ID: account_id,
                 CONF_ACCOUNT_NAME: account_name,
+                CONF_ACCOUNT_LANGUAGE: account_language,
             },
             unique_id=account_id,
             title=account_name,

@@ -158,7 +158,7 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
 
 
 
-def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, str]:
+def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, str, str | None]:
     """Derive a stable account identifier and useful display name."""
     data = account_payload
     if isinstance(account_payload, dict) and isinstance(account_payload.get("data"), dict):
@@ -198,4 +198,5 @@ def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, st
         # Never expose or store the API key itself as the account identifier.
         raw_id = hashlib.sha256(api_key.encode("utf-8")).hexdigest()[:20]
 
-    return str(raw_id), display_name
+    language = user.get("language") or data.get("language")
+    return str(raw_id), display_name, str(language) if language is not None else None

@@ -23,6 +23,7 @@ from .api import SweTrackApiClient, SweTrackApiError, SweTrackAuthError
 from .const import (
     API_BASE_URL,
     CONF_ACCOUNT_ID,
+    CONF_ACCOUNT_LANGUAGE,
     CONF_ACCOUNT_NAME,
     CONF_API_KEY,
     CONF_ENABLED_DEVICES,
@@ -60,7 +61,7 @@ class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except SweTrackApiError:
                 errors["base"] = "cannot_connect"
             else:
-                account_id, account_name = derive_account_identity(
+                account_id, account_name, account_language = derive_account_identity(
                     account.data, api_key
                 )
                 await self.async_set_unique_id(account_id)
@@ -71,6 +72,7 @@ class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         CONF_API_KEY: api_key,
                         CONF_ACCOUNT_ID: account_id,
                         CONF_ACCOUNT_NAME: account_name,
+                        CONF_ACCOUNT_LANGUAGE: account_language,
                     },
                 )
 

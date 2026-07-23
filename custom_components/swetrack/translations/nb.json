@@ -56,20 +56,26 @@
       "speed_limit": {
         "name": "Fartsgrense"
       },
-      "api_daily_limit": {
-        "name": "Daglig API-grense"
-      },
-      "api_requests_used": {
-        "name": "API-kall brukt"
-      },
-      "api_requests_remaining": {
-        "name": "Gjenstående API-kall"
-      },
-      "api_reset": {
-        "name": "API nullstilles"
-      },
       "polling_interval": {
         "name": "Oppdateringsintervall"
+      },
+      "daily_limit": {
+        "name": "Daglig grense"
+      },
+      "requests_today": {
+        "name": "Kall i dag"
+      },
+      "remaining": {
+        "name": "Gjenstående"
+      },
+      "reset": {
+        "name": "Nullstilles"
+      },
+      "trackers": {
+        "name": "Trackere"
+      },
+      "language": {
+        "name": "Språk"
       }
     },
     "binary_sensor": {

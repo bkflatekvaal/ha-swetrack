@@ -51,6 +51,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.request_count: int | None = None
         self.requests_remaining: int | None = None
         self.reset_at: str | None = None
+        self.device_count: int = 0
 
         super().__init__(
             hass,
@@ -89,6 +90,8 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             device = normalize_device(item)
             if device is not None:
                 devices[device.device_id] = device
+
+        self.device_count = len(devices)
 
         enabled = self.entry.options.get(CONF_ENABLED_DEVICES)
         if enabled is not None:

@@ -27,8 +27,8 @@ class SweTrackAccountEntity(CoordinatorEntity[SweTrackCoordinator]):
         return DeviceInfo(
             identifiers={account_identifier(self.coordinator)},
             manufacturer="SweTrack",
-            model="Cloud API",
-            name=f"SweTrack API – {account_name}",
+            model="Account",
+            name=f"SweTrack – {account_name}",
             configuration_url="https://www.swetrack.com/live",
         )
 

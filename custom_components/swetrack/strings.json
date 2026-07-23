@@ -56,20 +56,26 @@
       "speed_limit": {
         "name": "Speed limit"
       },
-      "api_daily_limit": {
-        "name": "API daily limit"
-      },
-      "api_requests_used": {
-        "name": "API requests used"
-      },
-      "api_requests_remaining": {
-        "name": "API requests remaining"
-      },
-      "api_reset": {
-        "name": "API reset"
-      },
       "polling_interval": {
         "name": "Polling interval"
+      },
+      "daily_limit": {
+        "name": "Daily limit"
+      },
+      "requests_today": {
+        "name": "Requests today"
+      },
+      "remaining": {
+        "name": "Remaining"
+      },
+      "reset": {
+        "name": "Reset"
+      },
+      "trackers": {
+        "name": "Trackers"
+      },
+      "language": {
+        "name": "Language"
       }
     },
     "binary_sensor": {

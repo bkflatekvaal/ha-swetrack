@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.1
+## Version 0.2.2
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -86,3 +86,10 @@ Version 0.2.1 uses REST polling through `/devices/info`. It does not register a
 webhook. SweTrack webhooks may be considered later as an optional mode for
 accounts where SweTrack support has enabled push delivery and Home Assistant
 has a securely reachable external URL.
+
+
+### Account device
+
+The account device uses short diagnostic names such as `Daily limit`,
+`Requests today`, `Remaining`, `Reset`, `Polling interval`, `Trackers` and
+`Language`.

@@ -18,7 +18,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import DOMAIN
+from .const import CONF_ACCOUNT_LANGUAGE, CONF_ACCOUNT_NAME, DOMAIN
 from .coordinator import SweTrackCoordinator
 from .entity import SweTrackAccountEntity, SweTrackEntity
 from .models import SweTrackDevice
@@ -88,32 +88,32 @@ class SweTrackAccountSensorDescription(SensorEntityDescription):
 
 ACCOUNT_SENSORS = (
     SweTrackAccountSensorDescription(
-        key="api_daily_limit",
-        translation_key="api_daily_limit",
+        key="daily_limit",
+        translation_key="daily_limit",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda coordinator: coordinator.request_limit,
     ),
     SweTrackAccountSensorDescription(
-        key="api_requests_used",
-        translation_key="api_requests_used",
+        key="requests_today",
+        translation_key="requests_today",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda coordinator: coordinator.request_count,
     ),
     SweTrackAccountSensorDescription(
-        key="api_requests_remaining",
-        translation_key="api_requests_remaining",
+        key="remaining",
+        translation_key="remaining",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda coordinator: coordinator.requests_remaining,
     ),
     SweTrackAccountSensorDescription(
-        key="api_reset",
-        translation_key="api_reset",
+        key="reset",
+        translation_key="reset",
         icon="mdi:clock-refresh-outline",
         device_class=SensorDeviceClass.TIMESTAMP,
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -132,7 +132,23 @@ ACCOUNT_SENSORS = (
             else None
         ),
     ),
+    SweTrackAccountSensorDescription(
+        key="trackers",
+        translation_key="trackers",
+        icon="mdi:map-marker-multiple",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda coordinator: coordinator.device_count,
+    ),
+    SweTrackAccountSensorDescription(
+        key="language",
+        translation_key="language",
+        icon="mdi:translate",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda coordinator: coordinator.entry.data.get(CONF_ACCOUNT_LANGUAGE),
+    ),
 )
+
 
 
 async def async_setup_entry(
