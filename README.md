@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.2
+## Version 0.2.3
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support

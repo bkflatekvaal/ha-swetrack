@@ -48,7 +48,7 @@
         "name": "Ekstern spenning"
       },
       "speed": {
-        "name": "Hastighet"
+        "name": "Aktuell hastighet"
       },
       "last_seen": {
         "name": "Sist sett"
@@ -60,22 +60,22 @@
         "name": "Oppdateringsintervall"
       },
       "daily_limit": {
-        "name": "Daglig grense"
+        "name": "Daglig API-grense"
       },
       "requests_today": {
-        "name": "Kall i dag"
+        "name": "API-kall i dag"
       },
       "remaining": {
-        "name": "Gjenstående"
+        "name": "Gjenstående API-kall"
       },
       "reset": {
-        "name": "Nullstilles"
+        "name": "API-kvote nullstilles"
       },
       "trackers": {
         "name": "Trackere"
       },
       "language": {
-        "name": "Språk"
+        "name": "Kontospråk"
       }
     },
     "binary_sensor": {

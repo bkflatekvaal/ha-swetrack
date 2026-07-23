@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3
+
+- Added explicit entity names for all account diagnostic sensors
+- Renamed quota reset timestamp to `Quota reset`
+- Renamed tracker speed sensors to `Current speed` and `Speed limit`
+- Added explicit fallback names to avoid generic device-name labels
+
 ## 0.2.2
 
 - Shortened parent device name to `SweTrack – <account>`

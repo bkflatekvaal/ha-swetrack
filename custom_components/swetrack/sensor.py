@@ -34,6 +34,7 @@ class SweTrackSensorDescription(SensorEntityDescription):
 SENSORS = (
     SweTrackSensorDescription(
         key="battery",
+        name="Battery",
         translation_key="battery",
         icon="mdi:battery",
         native_unit_of_measurement=PERCENTAGE,
@@ -43,6 +44,7 @@ SENSORS = (
     ),
     SweTrackSensorDescription(
         key="external_voltage",
+        name="External voltage",
         translation_key="external_voltage",
         icon="mdi:car-battery",
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
@@ -52,6 +54,7 @@ SENSORS = (
     ),
     SweTrackSensorDescription(
         key="speed",
+        name="Current speed",
         translation_key="speed",
         icon="mdi:speedometer",
         native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
@@ -61,6 +64,7 @@ SENSORS = (
     ),
     SweTrackSensorDescription(
         key="speed_limit",
+        name="Speed limit",
         translation_key="speed_limit",
         icon="mdi:speedometer-medium",
         native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
@@ -70,6 +74,7 @@ SENSORS = (
     ),
     SweTrackSensorDescription(
         key="last_seen",
+        name="Last seen",
         translation_key="last_seen",
         icon="mdi:clock-outline",
         device_class=SensorDeviceClass.TIMESTAMP,
@@ -89,6 +94,7 @@ class SweTrackAccountSensorDescription(SensorEntityDescription):
 ACCOUNT_SENSORS = (
     SweTrackAccountSensorDescription(
         key="daily_limit",
+        name="Daily API limit",
         translation_key="daily_limit",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -97,6 +103,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="requests_today",
+        name="API requests today",
         translation_key="requests_today",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -105,6 +112,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="remaining",
+        name="API requests remaining",
         translation_key="remaining",
         icon="mdi:counter",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -113,6 +121,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="reset",
+        name="Quota reset",
         translation_key="reset",
         icon="mdi:clock-refresh-outline",
         device_class=SensorDeviceClass.TIMESTAMP,
@@ -121,6 +130,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="polling_interval",
+        name="Polling interval",
         translation_key="polling_interval",
         icon="mdi:timer-sync-outline",
         native_unit_of_measurement="s",
@@ -134,6 +144,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="trackers",
+        name="Trackers",
         translation_key="trackers",
         icon="mdi:map-marker-multiple",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -142,6 +153,7 @@ ACCOUNT_SENSORS = (
     ),
     SweTrackAccountSensorDescription(
         key="language",
+        name="Account language",
         translation_key="language",
         icon="mdi:translate",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -182,6 +194,7 @@ class SweTrackSensor(SweTrackEntity, SensorEntity):
     ) -> None:
         super().__init__(coordinator, device_id)
         self.entity_description = description
+        self._attr_name = description.name
         self._attr_unique_id = f"{device_id}_{description.key}"
 
     @property
@@ -206,6 +219,7 @@ class SweTrackAccountSensor(SweTrackAccountEntity, SensorEntity):
     ) -> None:
         super().__init__(coordinator)
         self.entity_description = description
+        self._attr_name = description.name
         self._attr_unique_id = (
             f"{coordinator.entry.entry_id}_{description.key}"
         )

@@ -48,7 +48,7 @@
         "name": "External voltage"
       },
       "speed": {
-        "name": "Speed"
+        "name": "Current speed"
       },
       "last_seen": {
         "name": "Last seen"
@@ -60,22 +60,22 @@
         "name": "Polling interval"
       },
       "daily_limit": {
-        "name": "Daily limit"
+        "name": "Daily API limit"
       },
       "requests_today": {
-        "name": "Requests today"
+        "name": "API requests today"
       },
       "remaining": {
-        "name": "Remaining"
+        "name": "API requests remaining"
       },
       "reset": {
-        "name": "Reset"
+        "name": "Quota reset"
       },
       "trackers": {
         "name": "Trackers"
       },
       "language": {
-        "name": "Language"
+        "name": "Account language"
       }
     },
     "binary_sensor": {
