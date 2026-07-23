@@ -117,6 +117,13 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             return None
 
         body = payload if isinstance(payload, dict) else {}
+        meta = body.get("meta", {})
+        if not isinstance(meta, dict):
+            meta = {}
+        api_usage = meta.get("api_usage", {})
+        if not isinstance(api_usage, dict):
+            api_usage = {}
+
         rate = body.get("rate_limit", body.get("rateLimit", {}))
         if not isinstance(rate, dict):
             rate = {}
@@ -124,6 +131,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.request_limit = integer_from(
             headers.get("x-ratelimit-limit"),
             headers.get("x-rate-limit-limit"),
+            api_usage.get("daily_limit"),
             body.get("daily_limit"),
             rate.get("daily_limit"),
             rate.get("limit"),
@@ -131,6 +139,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.requests_remaining = integer_from(
             headers.get("x-ratelimit-remaining"),
             headers.get("x-rate-limit-remaining"),
+            api_usage.get("remaining_requests"),
             body.get("remaining_requests"),
             rate.get("remaining_requests"),
             rate.get("remaining"),
@@ -138,6 +147,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.reset_at = (
             headers.get("x-ratelimit-reset")
             or headers.get("x-rate-limit-reset")
+            or api_usage.get("reset_at")
             or body.get("reset_at")
             or rate.get("reset_at")
         )

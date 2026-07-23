@@ -121,14 +121,12 @@ class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return SweTrackOptionsFlow(config_entry)
+        """Return the options flow handler."""
+        return SweTrackOptionsFlow()
 
 
 class SweTrackOptionsFlow(config_entries.OptionsFlow):
     """Configure devices and polling."""
-
-    def __init__(self, config_entry) -> None:
-        self.config_entry = config_entry
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         errors: dict[str, str] = {}

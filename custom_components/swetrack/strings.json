@@ -52,6 +52,9 @@
       },
       "last_seen": {
         "name": "Last seen"
+      },
+      "speed_limit": {
+        "name": "Speed limit"
       }
     },
     "binary_sensor": {
@@ -63,6 +66,12 @@
       },
       "external_power": {
         "name": "External power"
+      },
+      "power_saving": {
+        "name": "Power saving"
+      },
+      "relay": {
+        "name": "Relay"
       }
     }
   }

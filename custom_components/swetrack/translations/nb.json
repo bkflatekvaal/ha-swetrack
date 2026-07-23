@@ -4,14 +4,14 @@
     "step": {
       "user": {
         "title": "Koble til SweTrack",
-        "description": "Opprett en ekstern API-n\u00f8kkel i SweTrack-appen eller nettportalen, og lim den inn nedenfor.",
+        "description": "Opprett en ekstern API-nøkkel i SweTrack-appen eller nettportalen, og lim den inn nedenfor.",
         "data": {
-          "api_key": "API-n\u00f8kkel"
+          "api_key": "API-nøkkel"
         }
       },
       "reauth_confirm": {
-        "title": "Koble SweTrack til p\u00e5 nytt",
-        "description": "Skriv inn en ny SweTrack API-n\u00f8kkel.",
+        "title": "Koble SweTrack til på nytt",
+        "description": "Skriv inn en ny SweTrack API-nøkkel.",
         "data": {
           "api_key": "API key"
         }
@@ -19,18 +19,18 @@
     },
     "error": {
       "cannot_connect": "Kunne ikke koble til SweTrack",
-      "invalid_auth": "API-n\u00f8kkelen er ugyldig eller utl\u00f8pt"
+      "invalid_auth": "API-nøkkelen er ugyldig eller utløpt"
     },
     "abort": {
       "already_configured": "Denne SweTrack-kontoen er allerede konfigurert",
-      "reauth_successful": "SweTrack er koblet til p\u00e5 nytt"
+      "reauth_successful": "SweTrack er koblet til på nytt"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "SweTrack-innstillinger",
-        "description": "Automatisk modus justerer intervallet etter API-kvoten n\u00e5r kvoteinformasjon er tilgjengelig. Fast intervall brukes bare i fast modus.",
+        "description": "Automatisk modus justerer intervallet etter API-kvoten når kvoteinformasjon er tilgjengelig. Fast intervall brukes bare i fast modus.",
         "data": {
           "update_mode": "Oppdateringsmodus",
           "update_interval": "Fast oppdateringsintervall",
@@ -52,6 +52,9 @@
       },
       "last_seen": {
         "name": "Sist sett"
+      },
+      "speed_limit": {
+        "name": "Fartsgrense"
       }
     },
     "binary_sensor": {
@@ -62,7 +65,13 @@
         "name": "Tenning"
       },
       "external_power": {
-        "name": "Ekstern str\u00f8m"
+        "name": "Ekstern strøm"
+      },
+      "power_saving": {
+        "name": "Strømsparing"
+      },
+      "relay": {
+        "name": "Relé"
       }
     }
   }

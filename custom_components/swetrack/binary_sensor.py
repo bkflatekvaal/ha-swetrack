@@ -48,6 +48,17 @@ BINARY_SENSORS = (
         device_class=BinarySensorDeviceClass.PLUG,
         value_fn=lambda device: device.external_power,
     ),
+    SweTrackBinaryDescription(
+        key="power_saving",
+        translation_key="power_saving",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.power_saving,
+    ),
+    SweTrackBinaryDescription(
+        key="relay",
+        translation_key="relay",
+        value_fn=lambda device: device.relay,
+    ),
 )
 
 

@@ -1,5 +1,13 @@
 # SweTrack for Home Assistant
 
+## v0.1.1
+
+- Fixed Options Flow on current Home Assistant versions
+- Mapped real SweTrack `/devices/info` response fields
+- Added API quota parsing from `meta.api_usage`
+- Strengthened diagnostics redaction for names, IDs, IMEI, groups, cookies and locations
+
+
 Unofficial Home Assistant custom integration for SweTrack GPS trackers.
 
 > Early development version. The API field mapping must be verified against

@@ -56,6 +56,14 @@ SENSORS = (
         value_fn=lambda device: device.speed,
     ),
     SweTrackSensorDescription(
+        key="speed_limit",
+        translation_key="speed_limit",
+        native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
+        device_class=SensorDeviceClass.SPEED,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.speed_limit,
+    ),
+    SweTrackSensorDescription(
         key="last_seen",
         translation_key="last_seen",
         device_class=SensorDeviceClass.TIMESTAMP,
