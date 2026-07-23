@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.4
+
+- Added local dark-mode icon and logo variants
+- Changed README logo to an absolute raw GitHub PNG URL
+- Added root `logo.png` for HACS README rendering
+- Removed the unused repository-root `brand/` directory
+
 ## 0.2.3
 
 - Added explicit entity names for all account diagnostic sensors

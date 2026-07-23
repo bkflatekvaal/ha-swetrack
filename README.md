@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.svg" width="140" alt="SweTrack">
+  <img src="https://raw.githubusercontent.com/bkflatekvaal/ha-swetrack/main/logo.png" width="140" alt="SweTrack">
 </p>
 
 # SweTrack for Home Assistant
@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.3
+## Version 0.2.4
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -93,3 +93,11 @@ has a securely reachable external URL.
 The account device uses short diagnostic names such as `Daily limit`,
 `Requests today`, `Remaining`, `Reset`, `Polling interval`, `Trackers` and
 `Language`.
+
+
+### Branding notes
+
+Home Assistant loads local brand assets from
+`custom_components/swetrack/brand/`, including light and dark variants.
+The README uses an absolute raw GitHub PNG URL for compatibility with both
+GitHub and HACS rendering.
