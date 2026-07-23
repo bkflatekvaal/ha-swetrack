@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.5
+
+- Added robust automatic reauthentication for invalid or expired API keys
+- Prevented a replacement key from switching the config entry to another account
+- Refreshes account name and language during reauthentication
+- Added a persistent Repairs issue when the daily API quota is exhausted
+- Automatically removes the quota issue after successful communication
+- Cleans up Repairs issues when the config entry is removed
+- Improved first-time setup error handling for migrated config entries
+- Corrected documentation and issue tracker URLs in the manifest
+
 ## 0.2.4
 
 - Added local dark-mode icon and logo variants

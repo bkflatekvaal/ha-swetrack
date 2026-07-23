@@ -9,6 +9,7 @@ from typing import Any
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
@@ -25,6 +26,7 @@ from .const import (
     DEFAULT_AUTO_INTERVAL,
     DEFAULT_MANUAL_INTERVAL,
     DOMAIN,
+    ISSUE_API_QUOTA_EXHAUSTED,
     MAX_UPDATE_INTERVAL,
     MIN_UPDATE_INTERVAL,
     UPDATE_MODE_AUTO,
@@ -77,10 +79,12 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             raise ConfigEntryAuthFailed(str(err)) from err
         except SweTrackRateLimitError as err:
             self._lengthen_interval()
+            self._create_quota_repair()
             raise UpdateFailed(str(err)) from err
         except SweTrackApiError as err:
             raise UpdateFailed(str(err)) from err
 
+        self._delete_quota_repair()
         self.last_headers = response.headers
         self.last_raw_payload = response.data
         self._read_rate_limit(response.data, response.headers)
@@ -106,6 +110,30 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             self._apply_automatic_interval()
 
         return devices
+
+    @property
+    def quota_issue_id(self) -> str:
+        """Return the unique Repairs issue ID for this config entry."""
+        return f"{ISSUE_API_QUOTA_EXHAUSTED}_{self.entry.entry_id}"
+
+    def _create_quota_repair(self) -> None:
+        """Create a Repairs issue when the API quota is exhausted."""
+        ir.async_create_issue(
+            self.hass,
+            DOMAIN,
+            self.quota_issue_id,
+            is_fixable=False,
+            is_persistent=True,
+            severity=ir.IssueSeverity.ERROR,
+            translation_key=ISSUE_API_QUOTA_EXHAUSTED,
+            translation_placeholders={
+                "account": self.entry.title,
+            },
+        )
+
+    def _delete_quota_repair(self) -> None:
+        """Remove the quota issue after a successful API request."""
+        ir.async_delete_issue(self.hass, DOMAIN, self.quota_issue_id)
 
     def _read_rate_limit(
         self, payload: Any, headers: dict[str, str]

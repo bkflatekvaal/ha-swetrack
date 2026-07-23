@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.4
+## Version 0.2.5
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -101,3 +101,14 @@ Home Assistant loads local brand assets from
 `custom_components/swetrack/brand/`, including light and dark variants.
 The README uses an absolute raw GitHub PNG URL for compatibility with both
 GitHub and HACS rendering.
+
+
+### Reauthentication and Repairs
+
+Invalid or expired API keys automatically start a Home Assistant
+reauthentication flow. The replacement key is validated against both the
+account and devices endpoints and must belong to the same SweTrack account.
+
+If the daily SweTrack API quota is exhausted, Home Assistant creates a
+Repairs issue. The integration backs off automatically and removes the issue
+after the API becomes available again.

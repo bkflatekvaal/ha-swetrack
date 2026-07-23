@@ -11,7 +11,7 @@
       },
       "reauth_confirm": {
         "title": "Reconnect SweTrack",
-        "description": "Enter a new SweTrack API key.",
+        "description": "The connection to SweTrack account **{account}** must be renewed. Enter a new API key for the same account.",
         "data": {
           "api_key": "API key"
         }
@@ -23,7 +23,8 @@
     },
     "abort": {
       "already_configured": "This SweTrack account is already configured",
-      "reauth_successful": "SweTrack was reconnected"
+      "reauth_successful": "SweTrack was reconnected",
+      "wrong_account": "The API key belongs to a different SweTrack account"
     }
   },
   "options": {
@@ -94,6 +95,12 @@
       "relay": {
         "name": "Relay"
       }
+    }
+  },
+  "issues": {
+    "api_quota_exhausted": {
+      "title": "SweTrack API quota exhausted",
+      "description": "Home Assistant cannot retrieve new data for SweTrack account **{account}** because the daily API quota has been exhausted. The integration automatically increases the polling interval and will retry later. This issue is removed when the API responds normally."
     }
   }
 }

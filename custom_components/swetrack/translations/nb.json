@@ -11,9 +11,9 @@
       },
       "reauth_confirm": {
         "title": "Koble SweTrack til på nytt",
-        "description": "Skriv inn en ny SweTrack API-nøkkel.",
+        "description": "Tilkoblingen til SweTrack-kontoen **{account}** må fornyes. Skriv inn en ny API-nøkkel for den samme kontoen.",
         "data": {
-          "api_key": "API key"
+          "api_key": "API-nøkkel"
         }
       }
     },
@@ -23,7 +23,8 @@
     },
     "abort": {
       "already_configured": "Denne SweTrack-kontoen er allerede konfigurert",
-      "reauth_successful": "SweTrack er koblet til på nytt"
+      "reauth_successful": "SweTrack er koblet til på nytt",
+      "wrong_account": "API-nøkkelen tilhører en annen SweTrack-konto"
     }
   },
   "options": {
@@ -94,6 +95,12 @@
       "relay": {
         "name": "Relé"
       }
+    }
+  },
+  "issues": {
+    "api_quota_exhausted": {
+      "title": "SweTrack API-kvoten er brukt opp",
+      "description": "Home Assistant kan ikke hente nye data for SweTrack-kontoen **{account}** fordi den daglige API-kvoten er brukt opp. Integrasjonen øker oppdateringsintervallet automatisk og prøver igjen senere. Varslingen fjernes når API-et svarer normalt."
     }
   }
 }

@@ -5,9 +5,9 @@
     "@bkflatekvaal"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/YOUR_GITHUB_USERNAME/ha-swetrack",
+  "documentation": "https://github.com/bkflatekvaal/ha-swetrack",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/YOUR_GITHUB_USERNAME/ha-swetrack/issues",
+  "issue_tracker": "https://github.com/bkflatekvaal/ha-swetrack/issues",
   "requirements": [],
-  "version": "0.2.4"
+  "version": "0.2.5"
 }

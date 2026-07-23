@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api import SweTrackApiClient
+from .api import SweTrackApiClient, SweTrackApiError, SweTrackAuthError
 from .const import (
     API_BASE_URL,
     CONF_ACCOUNT_ID,
@@ -14,6 +16,7 @@ from .const import (
     CONF_ACCOUNT_NAME,
     CONF_API_KEY,
     DOMAIN,
+    ISSUE_API_QUOTA_EXHAUSTED,
     PLATFORMS,
 )
 from .coordinator import SweTrackCoordinator
@@ -28,7 +31,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         API_BASE_URL,
     )
     if CONF_ACCOUNT_ID not in entry.data:
-        account = await api.async_get_account()
+        try:
+            account = await api.async_get_account()
+        except SweTrackAuthError as err:
+            raise ConfigEntryAuthFailed(str(err)) from err
+        except SweTrackApiError as err:
+            raise ConfigEntryNotReady(str(err)) from err
+
         account_id, account_name, account_language = derive_account_identity(
             account.data, entry.data[CONF_API_KEY]
         )
@@ -65,3 +74,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload after options change."""
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Clean up persistent Repairs issues when an entry is removed."""
+    ir.async_delete_issue(
+        hass,
+        DOMAIN,
+        f"{ISSUE_API_QUOTA_EXHAUSTED}_{entry.entry_id}",
+    )

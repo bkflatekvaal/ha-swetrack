@@ -29,3 +29,5 @@ API_DEVICES_INFO = "devices/info"
 API_ACCOUNT_INFO = "account/info"
 
 ATTRIBUTION = "Data provided by SweTrack"
+
+ISSUE_API_QUOTA_EXHAUSTED = "api_quota_exhausted"
