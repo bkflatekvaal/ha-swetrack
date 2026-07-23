@@ -77,6 +77,18 @@
       },
       "language": {
         "name": "Account language"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
+      "wake_interval": {
+        "name": "Wake-up interval"
+      },
+      "events": {
+        "name": "Total events"
       }
     },
     "binary_sensor": {
@@ -87,13 +99,25 @@
         "name": "Ignition"
       },
       "external_power": {
-        "name": "External power"
+        "name": "External power connected"
       },
       "power_saving": {
-        "name": "Power saving"
+        "name": "Power saving mode"
       },
       "relay": {
         "name": "Relay"
+      },
+      "wake_by_time": {
+        "name": "Wake by time"
+      },
+      "wake_by_vibration": {
+        "name": "Wake by vibration"
+      },
+      "wake_by_light": {
+        "name": "Wake by light"
+      },
+      "safety_zone": {
+        "name": "Safety zone"
       }
     }
   },

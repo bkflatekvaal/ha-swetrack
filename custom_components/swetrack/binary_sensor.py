@@ -31,6 +31,7 @@ class SweTrackBinaryDescription(BinarySensorEntityDescription):
 BINARY_SENSORS = (
     SweTrackBinaryDescription(
         key="online",
+        name="Online",
         translation_key="online",
         icon="mdi:lan-connect",
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
@@ -39,13 +40,14 @@ BINARY_SENSORS = (
     ),
     SweTrackBinaryDescription(
         key="ignition",
+        name="Ignition",
         translation_key="ignition",
         icon="mdi:key-variant",
-        device_class=BinarySensorDeviceClass.POWER,
         value_fn=lambda device: device.ignition,
     ),
     SweTrackBinaryDescription(
         key="external_power",
+        name="External power connected",
         translation_key="external_power",
         icon="mdi:power-plug",
         device_class=BinarySensorDeviceClass.PLUG,
@@ -53,13 +55,47 @@ BINARY_SENSORS = (
     ),
     SweTrackBinaryDescription(
         key="power_saving",
+        name="Power saving mode",
         translation_key="power_saving",
         icon="mdi:leaf",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda device: device.power_saving,
     ),
     SweTrackBinaryDescription(
+        key="wake_by_time",
+        name="Wake by time",
+        translation_key="wake_by_time",
+        icon="mdi:clock-start",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.wake_by_time,
+    ),
+    SweTrackBinaryDescription(
+        key="wake_by_vibration",
+        name="Wake by vibration",
+        translation_key="wake_by_vibration",
+        icon="mdi:vibrate",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.wake_by_vibration,
+    ),
+    SweTrackBinaryDescription(
+        key="wake_by_light",
+        name="Wake by light",
+        translation_key="wake_by_light",
+        icon="mdi:weather-sunny",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.wake_by_light,
+    ),
+    SweTrackBinaryDescription(
+        key="safety_zone",
+        name="Safety zone",
+        translation_key="safety_zone",
+        icon="mdi:shield-map-outline",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.safety_zone,
+    ),
+    SweTrackBinaryDescription(
         key="relay",
+        name="Relay",
         translation_key="relay",
         icon="mdi:electric-switch",
         value_fn=lambda device: device.relay,
@@ -93,6 +129,7 @@ class SweTrackBinarySensor(SweTrackEntity, BinarySensorEntity):
     ) -> None:
         super().__init__(coordinator, device_id)
         self.entity_description = description
+        self._attr_name = description.name
         self._attr_unique_id = f"{device_id}_{description.key}"
 
     @property

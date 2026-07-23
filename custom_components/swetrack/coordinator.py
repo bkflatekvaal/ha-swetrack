@@ -26,6 +26,7 @@ from .const import (
     DEFAULT_AUTO_INTERVAL,
     DEFAULT_MANUAL_INTERVAL,
     DOMAIN,
+    EVENT_COUNT_INTERVAL,
     ISSUE_API_QUOTA_EXHAUSTED,
     MAX_UPDATE_INTERVAL,
     MIN_UPDATE_INTERVAL,
@@ -54,6 +55,8 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.requests_remaining: int | None = None
         self.reset_at: str | None = None
         self.device_count: int = 0
+        self.event_count: int | None = None
+        self._event_count_updated_at: datetime | None = None
 
         super().__init__(
             hass,
@@ -88,6 +91,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.last_headers = response.headers
         self.last_raw_payload = response.data
         self._read_rate_limit(response.data, response.headers)
+        await self._async_update_event_count()
 
         devices: dict[str, SweTrackDevice] = {}
         for item in extract_device_list(response.data):
@@ -110,6 +114,44 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             self._apply_automatic_interval()
 
         return devices
+
+    async def _async_update_event_count(self) -> None:
+        """Refresh the total event count at a lower frequency than device data."""
+        now = datetime.now(timezone.utc)
+        if (
+            self._event_count_updated_at is not None
+            and (now - self._event_count_updated_at).total_seconds()
+            < EVENT_COUNT_INTERVAL
+        ):
+            return
+
+        try:
+            response = await self.api.async_get_event_count()
+        except SweTrackAuthError as err:
+            raise ConfigEntryAuthFailed(str(err)) from err
+        except SweTrackRateLimitError:
+            self._lengthen_interval()
+            self._create_quota_repair()
+            return
+        except SweTrackApiError as err:
+            _LOGGER.warning("Could not update SweTrack event count: %s", err)
+            return
+
+        self._event_count_updated_at = now
+        self._read_rate_limit(response.data, response.headers)
+
+        payload = response.data if isinstance(response.data, dict) else {}
+        data = payload.get("data")
+        if not isinstance(data, dict):
+            return
+        pagination = data.get("pagination")
+        if not isinstance(pagination, dict):
+            return
+
+        try:
+            self.event_count = int(pagination.get("total_rows"))
+        except (TypeError, ValueError):
+            self.event_count = None
 
     @property
     def quota_issue_id(self) -> str:

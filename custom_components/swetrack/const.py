@@ -31,3 +31,6 @@ API_ACCOUNT_INFO = "account/info"
 ATTRIBUTION = "Data provided by SweTrack"
 
 ISSUE_API_QUOTA_EXHAUSTED = "api_quota_exhausted"
+
+# Refresh the total event count at most every 15 minutes.
+EVENT_COUNT_INTERVAL = 900

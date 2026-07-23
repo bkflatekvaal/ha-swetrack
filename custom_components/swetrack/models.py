@@ -54,6 +54,13 @@ class SweTrackDevice:
     external_power: bool | None = None
     power_saving: bool | None = None
     relay: bool | None = None
+    temperature: float | None = None
+    humidity: float | None = None
+    wake_by_time: bool | None = None
+    wake_interval: int | None = None
+    wake_by_vibration: bool | None = None
+    wake_by_light: bool | None = None
+    safety_zone: bool | None = None
     last_seen: str | None = None
     raw: dict[str, Any] = field(default_factory=dict)
 
@@ -131,6 +138,32 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
         saving_data.get("current") if isinstance(saving_data, dict) else saving_data
     )
 
+    temp_hum = raw.get("temp_hum")
+    if not isinstance(temp_hum, dict):
+        temp_hum = {}
+    current_temp_hum = temp_hum.get("current_data")
+    if not isinstance(current_temp_hum, dict):
+        current_temp_hum = {}
+    temp_settings = temp_hum.get("current_settings")
+    if not isinstance(temp_settings, dict):
+        temp_settings = {}
+
+    temperature = as_float(current_temp_hum.get("temperature"))
+    humidity = as_float(current_temp_hum.get("humidity"))
+    if temperature is not None:
+        temperature /= 100
+        if str(temp_settings.get("temp_unit", "")).lower().startswith("fahrenheit"):
+            temperature = (temperature - 32) * 5 / 9
+    if humidity is not None:
+        humidity /= 100
+
+    wakeup_info = raw.get("wakeup_info")
+    if not isinstance(wakeup_info, dict):
+        wakeup_info = {}
+    wake_settings = wakeup_info.get("current_settings")
+    if not isinstance(wake_settings, dict):
+        wake_settings = {}
+
     status = raw.get("status")
 
     return SweTrackDevice(
@@ -152,6 +185,17 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
         external_power=as_bool(battery_data.get("external_power_supply")),
         power_saving=as_bool(power_saving),
         relay=as_bool(relay),
+        temperature=temperature,
+        humidity=humidity,
+        wake_by_time=as_bool(wake_settings.get("wakebytime")),
+        wake_interval=(
+            int(wake_settings["wakebytimeinfo"])
+            if wake_settings.get("wakebytimeinfo") is not None
+            else None
+        ),
+        wake_by_vibration=as_bool(wake_settings.get("wakebyvib")),
+        wake_by_light=as_bool(wake_settings.get("wakebylight")),
+        safety_zone=as_bool(wake_settings.get("safetyzone")),
         last_seen=raw.get("last_update") or position.get("datetime"),
         raw=raw,
     )

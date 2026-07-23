@@ -77,6 +77,18 @@
       },
       "language": {
         "name": "Kontospråk"
+      },
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "humidity": {
+        "name": "Luftfuktighet"
+      },
+      "wake_interval": {
+        "name": "Oppvåkningsintervall"
+      },
+      "events": {
+        "name": "Totalt antall hendelser"
       }
     },
     "binary_sensor": {
@@ -87,13 +99,25 @@
         "name": "Tenning"
       },
       "external_power": {
-        "name": "Ekstern strøm"
+        "name": "Ekstern strøm tilkoblet"
       },
       "power_saving": {
-        "name": "Strømsparing"
+        "name": "Strømsparingsmodus"
       },
       "relay": {
         "name": "Relé"
+      },
+      "wake_by_time": {
+        "name": "Våkne etter tid"
+      },
+      "wake_by_vibration": {
+        "name": "Våkne ved vibrasjon"
+      },
+      "wake_by_light": {
+        "name": "Våkne ved lys"
+      },
+      "safety_zone": {
+        "name": "Sikkerhetssone"
       }
     }
   },

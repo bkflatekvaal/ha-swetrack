@@ -44,7 +44,26 @@ class SweTrackApiClient:
         """Return all devices and their current state."""
         return await self._request("GET", "devices/info")
 
-    async def _request(self, method: str, path: str) -> SweTrackResponse:
+    async def async_get_event_count(self) -> SweTrackResponse:
+        """Return one event page whose pagination contains the total count."""
+        return await self._request(
+            "POST",
+            "events/list",
+            json_data={
+                "pagesize": 1,
+                "page": 1,
+                "sort": "latest",
+                "onlywithposition": False,
+            },
+        )
+
+    async def _request(
+        self,
+        method: str,
+        path: str,
+        *,
+        json_data: dict[str, Any] | None = None,
+    ) -> SweTrackResponse:
         url = self._base_url + path.lstrip("/")
         headers = {
             "Authorization": f"Bearer {self._api_key}",
@@ -54,7 +73,11 @@ class SweTrackApiClient:
 
         try:
             async with self._session.request(
-                method, url, headers=headers, timeout=30
+                method,
+                url,
+                headers=headers,
+                json=json_data,
+                timeout=30,
             ) as response:
                 await self._raise_for_status(response)
                 try:

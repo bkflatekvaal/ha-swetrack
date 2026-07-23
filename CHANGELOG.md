@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.6
+
+- Renamed external power to `External power connected`
+- Ensured ignition is displayed as `Ignition`, not generic `Power`
+- Added temperature and humidity sensors with API value scaling
+- Added wake-by-time, wake-by-vibration, wake-by-light and safety-zone diagnostics
+- Added wake-up interval diagnostic sensor
+- Added cached total event count, refreshed every 15 minutes
+- Added explicit binary sensor fallback names
+
 ## 0.2.5
 
 - Added robust automatic reauthentication for invalid or expired API keys

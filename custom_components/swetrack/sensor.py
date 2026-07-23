@@ -13,7 +13,13 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfElectricPotential, UnitOfSpeed
+from homeassistant.const import (
+    PERCENTAGE,
+    UnitOfElectricPotential,
+    UnitOfSpeed,
+    UnitOfTemperature,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -71,6 +77,36 @@ SENSORS = (
         device_class=SensorDeviceClass.SPEED,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda device: device.speed_limit,
+    ),
+    SweTrackSensorDescription(
+        key="temperature",
+        name="Temperature",
+        translation_key="temperature",
+        icon="mdi:thermometer",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda device: device.temperature,
+    ),
+    SweTrackSensorDescription(
+        key="humidity",
+        name="Humidity",
+        translation_key="humidity",
+        icon="mdi:water-percent",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.HUMIDITY,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda device: device.humidity,
+    ),
+    SweTrackSensorDescription(
+        key="wake_interval",
+        name="Wake-up interval",
+        translation_key="wake_interval",
+        icon="mdi:timer-outline",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        device_class=SensorDeviceClass.DURATION,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda device: device.wake_interval,
     ),
     SweTrackSensorDescription(
         key="last_seen",
@@ -150,6 +186,15 @@ ACCOUNT_SENSORS = (
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda coordinator: coordinator.device_count,
+    ),
+    SweTrackAccountSensorDescription(
+        key="events",
+        name="Total events",
+        translation_key="events",
+        icon="mdi:alert-circle-outline",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        value_fn=lambda coordinator: coordinator.event_count,
     ),
     SweTrackAccountSensorDescription(
         key="language",

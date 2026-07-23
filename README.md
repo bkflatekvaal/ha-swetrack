@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.5
+## Version 0.2.6
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -112,3 +112,10 @@ account and devices endpoints and must belong to the same SweTrack account.
 If the daily SweTrack API quota is exhausted, Home Assistant creates a
 Repairs issue. The integration backs off automatically and removes the issue
 after the API becomes available again.
+
+
+### Additional device data
+
+Hardware-dependent temperature, humidity and wake-up settings are exposed when
+reported by the tracker. The account device also includes a cached total event
+count, refreshed at most every 15 minutes to conserve API quota.
