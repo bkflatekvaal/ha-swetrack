@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.0
+## Version 0.2.1
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -75,3 +75,14 @@ logger:
 - Added local brand assets supplied by the repository owner
 - Added entity icons and model generation detection
 - Refreshed documentation
+- Added repository-level HACS brand assets
+- Read account username from `/account/info`
+- Changed device configuration link to SweTrack Live
+
+
+## Data updates
+
+Version 0.2.1 uses REST polling through `/devices/info`. It does not register a
+webhook. SweTrack webhooks may be considered later as an optional mode for
+accounts where SweTrack support has enabled push delivery and Home Assistant
+has a securely reachable external URL.

@@ -29,7 +29,7 @@ class SweTrackAccountEntity(CoordinatorEntity[SweTrackCoordinator]):
             manufacturer="SweTrack",
             model="Cloud API",
             name=f"SweTrack API – {account_name}",
-            configuration_url="https://app.swetrack.com/",
+            configuration_url="https://www.swetrack.com/live",
         )
 
 
@@ -64,5 +64,5 @@ class SweTrackEntity(CoordinatorEntity[SweTrackCoordinator]):
             model=model,
             name=name,
             via_device=account_identifier(self.coordinator),
-            configuration_url="https://app.swetrack.com/",
+            configuration_url="https://www.swetrack.com/live",
         )

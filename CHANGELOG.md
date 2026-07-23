@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1
+
+- Added repository-level `brand/` assets for HACS
+- Correctly read `data.user.id`, `username`, `email` and `language`
+- Improved parent API-device naming
+- Changed configuration URL to `https://www.swetrack.com/live`
+- Documented that the integration currently uses REST polling only
+
 ## 0.2.0
 
 - Parent SweTrack API device per config entry

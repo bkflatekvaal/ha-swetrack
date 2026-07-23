@@ -159,7 +159,7 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
 
 
 def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, str]:
-    """Derive a stable account identifier and display name without storing secrets."""
+    """Derive a stable account identifier and useful display name."""
     data = account_payload
     if isinstance(account_payload, dict) and isinstance(account_payload.get("data"), dict):
         data = account_payload["data"]
@@ -167,25 +167,35 @@ def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, st
     if not isinstance(data, dict):
         data = {}
 
+    user = data.get("user")
+    if not isinstance(user, dict):
+        user = data
+
     raw_id = (
-        data.get("id")
+        user.get("id")
+        or user.get("user_id")
+        or user.get("userId")
         or data.get("account_id")
         or data.get("accountId")
-        or data.get("user_id")
-        or data.get("userId")
     )
-    raw_name = (
-        data.get("name")
-        or data.get("account_name")
-        or data.get("accountName")
-        or data.get("email")
-        or "SweTrack API"
-    )
+
+    username = user.get("username") or user.get("name")
+    email = user.get("email")
+
+    if username:
+        display_name = str(username)
+    elif email:
+        # Show a useful but less exposing fallback in Home Assistant.
+        local_part, separator, domain = str(email).partition("@")
+        if separator:
+            display_name = f"{local_part[:2]}***@{domain}"
+        else:
+            display_name = "SweTrack account"
+    else:
+        display_name = "SweTrack account"
 
     if raw_id is None:
-        # Fallback allows multiple entries while never storing the API key itself
-        # as an identifier. A changed key may create a new identity only when the
-        # account endpoint does not expose a stable account ID.
+        # Never expose or store the API key itself as the account identifier.
         raw_id = hashlib.sha256(api_key.encode("utf-8")).hexdigest()[:20]
 
-    return str(raw_id), str(raw_name)
+    return str(raw_id), display_name
