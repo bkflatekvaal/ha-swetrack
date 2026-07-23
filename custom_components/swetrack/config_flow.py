@@ -22,6 +22,8 @@ from homeassistant.helpers.selector import (
 from .api import SweTrackApiClient, SweTrackApiError, SweTrackAuthError
 from .const import (
     API_BASE_URL,
+    CONF_ACCOUNT_ID,
+    CONF_ACCOUNT_NAME,
     CONF_API_KEY,
     CONF_ENABLED_DEVICES,
     CONF_UPDATE_INTERVAL,
@@ -34,7 +36,7 @@ from .const import (
     UPDATE_MODE_AUTO,
     UPDATE_MODE_MANUAL,
 )
-from .models import extract_device_list, normalize_device
+from .models import derive_account_identity, extract_device_list, normalize_device
 
 
 class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -46,9 +48,6 @@ class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            await self.async_set_unique_id("swetrack_account")
-            self._abort_if_unique_id_configured()
-
             api_key = user_input[CONF_API_KEY].strip()
             client = SweTrackApiClient(
                 async_get_clientsession(self.hass), api_key, API_BASE_URL
@@ -61,17 +60,18 @@ class SweTrackConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except SweTrackApiError:
                 errors["base"] = "cannot_connect"
             else:
-                title = "SweTrack"
-                if isinstance(account.data, dict):
-                    title = str(
-                        account.data.get("name")
-                        or account.data.get("email")
-                        or account.data.get("account_name")
-                        or title
-                    )
+                account_id, account_name = derive_account_identity(
+                    account.data, api_key
+                )
+                await self.async_set_unique_id(account_id)
+                self._abort_if_unique_id_configured()
                 return self.async_create_entry(
-                    title=title,
-                    data={CONF_API_KEY: api_key},
+                    title=account_name,
+                    data={
+                        CONF_API_KEY: api_key,
+                        CONF_ACCOUNT_ID: account_id,
+                        CONF_ACCOUNT_NAME: account_name,
+                    },
                 )
 
         return self.async_show_form(

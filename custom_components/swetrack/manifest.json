@@ -1,11 +1,13 @@
 {
   "domain": "swetrack",
   "name": "SweTrack",
-  "codeowners": [],
+  "codeowners": [
+    "@bkflatekvaal"
+  ],
   "config_flow": true,
-  "documentation": "https://github.com/bkflatekvaal/ha-swetrack",
+  "documentation": "https://github.com/YOUR_GITHUB_USERNAME/ha-swetrack",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/bkflatekvaal/ha-swetrack/issues",
+  "issue_tracker": "https://github.com/YOUR_GITHUB_USERNAME/ha-swetrack/issues",
   "requirements": [],
-  "version": "0.1.1"
+  "version": "0.2.0"
 }

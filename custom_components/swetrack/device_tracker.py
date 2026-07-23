@@ -29,6 +29,7 @@ class SweTrackDeviceTracker(SweTrackEntity, TrackerEntity):
     """Represent a SweTrack tracker on the map."""
 
     _attr_name = None
+    _attr_icon = "mdi:crosshairs-gps"
 
     def __init__(self, coordinator: SweTrackCoordinator, device_id: str) -> None:
         super().__init__(coordinator, device_id)
@@ -61,4 +62,6 @@ class SweTrackDeviceTracker(SweTrackEntity, TrackerEntity):
             "heading": self.device.heading,
             "altitude": self.device.altitude,
             "last_seen": self.device.last_seen,
+            "online": self.device.online,
+            "power_saving": self.device.power_saving,
         }

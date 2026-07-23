@@ -48,6 +48,7 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
         self.last_headers: dict[str, str] = {}
         self.last_raw_payload: Any = None
         self.request_limit: int | None = None
+        self.request_count: int | None = None
         self.requests_remaining: int | None = None
         self.reset_at: str | None = None
 
@@ -135,6 +136,12 @@ class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
             body.get("daily_limit"),
             rate.get("daily_limit"),
             rate.get("limit"),
+        )
+        self.request_count = integer_from(
+            api_usage.get("request_count"),
+            body.get("request_count"),
+            rate.get("request_count"),
+            rate.get("used"),
         )
         self.requests_remaining = integer_from(
             headers.get("x-ratelimit-remaining"),

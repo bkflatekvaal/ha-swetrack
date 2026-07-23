@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+import hashlib
 
 
 def as_float(value: Any) -> float | None:
@@ -38,6 +39,7 @@ class SweTrackDevice:
     device_id: str
     name: str
     model: str | None = None
+    model_generation: str | None = None
     latitude: float | None = None
     longitude: float | None = None
     altitude: float | None = None
@@ -85,6 +87,16 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
 
     model_data = raw.get("model")
     model = model_data.get("model") if isinstance(model_data, dict) else model_data
+    model_photo = (
+        model_data.get("model_photo") if isinstance(model_data, dict) else None
+    )
+    model_generation = None
+    if isinstance(model_photo, str):
+        lower_photo = model_photo.lower()
+        if "gen1" in lower_photo:
+            model_generation = "Gen1"
+        elif "gen2" in lower_photo:
+            model_generation = "Gen2"
 
     position = raw.get("position_info")
     if not isinstance(position, dict):
@@ -125,6 +137,7 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
         device_id=str(device_id),
         name=str(raw.get("name") or f"SweTrack {device_id}"),
         model=str(model) if model is not None else None,
+        model_generation=model_generation,
         latitude=as_float(position.get("latitude")),
         longitude=as_float(position.get("longitude")),
         altitude=as_float(position.get("altitude")),
@@ -142,3 +155,37 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
         last_seen=raw.get("last_update") or position.get("datetime"),
         raw=raw,
     )
+
+
+
+def derive_account_identity(account_payload: Any, api_key: str) -> tuple[str, str]:
+    """Derive a stable account identifier and display name without storing secrets."""
+    data = account_payload
+    if isinstance(account_payload, dict) and isinstance(account_payload.get("data"), dict):
+        data = account_payload["data"]
+
+    if not isinstance(data, dict):
+        data = {}
+
+    raw_id = (
+        data.get("id")
+        or data.get("account_id")
+        or data.get("accountId")
+        or data.get("user_id")
+        or data.get("userId")
+    )
+    raw_name = (
+        data.get("name")
+        or data.get("account_name")
+        or data.get("accountName")
+        or data.get("email")
+        or "SweTrack API"
+    )
+
+    if raw_id is None:
+        # Fallback allows multiple entries while never storing the API key itself
+        # as an identifier. A changed key may create a new identity only when the
+        # account endpoint does not expose a stable account ID.
+        raw_id = hashlib.sha256(api_key.encode("utf-8")).hexdigest()[:20]
+
+    return str(raw_id), str(raw_name)

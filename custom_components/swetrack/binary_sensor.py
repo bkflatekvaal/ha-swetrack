@@ -32,6 +32,7 @@ BINARY_SENSORS = (
     SweTrackBinaryDescription(
         key="online",
         translation_key="online",
+        icon="mdi:lan-connect",
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda device: device.online,
@@ -39,24 +40,28 @@ BINARY_SENSORS = (
     SweTrackBinaryDescription(
         key="ignition",
         translation_key="ignition",
+        icon="mdi:key-variant",
         device_class=BinarySensorDeviceClass.POWER,
         value_fn=lambda device: device.ignition,
     ),
     SweTrackBinaryDescription(
         key="external_power",
         translation_key="external_power",
+        icon="mdi:power-plug",
         device_class=BinarySensorDeviceClass.PLUG,
         value_fn=lambda device: device.external_power,
     ),
     SweTrackBinaryDescription(
         key="power_saving",
         translation_key="power_saving",
+        icon="mdi:leaf",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda device: device.power_saving,
     ),
     SweTrackBinaryDescription(
         key="relay",
         translation_key="relay",
+        icon="mdi:electric-switch",
         value_fn=lambda device: device.relay,
     ),
 )

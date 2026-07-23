@@ -7,8 +7,16 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import SweTrackApiClient
-from .const import API_BASE_URL, CONF_API_KEY, DOMAIN, PLATFORMS
+from .const import (
+    API_BASE_URL,
+    CONF_ACCOUNT_ID,
+    CONF_ACCOUNT_NAME,
+    CONF_API_KEY,
+    DOMAIN,
+    PLATFORMS,
+)
 from .coordinator import SweTrackCoordinator
+from .models import derive_account_identity
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -18,6 +26,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         entry.data[CONF_API_KEY],
         API_BASE_URL,
     )
+    if CONF_ACCOUNT_ID not in entry.data:
+        account = await api.async_get_account()
+        account_id, account_name = derive_account_identity(
+            account.data, entry.data[CONF_API_KEY]
+        )
+        hass.config_entries.async_update_entry(
+            entry,
+            data={
+                **entry.data,
+                CONF_ACCOUNT_ID: account_id,
+                CONF_ACCOUNT_NAME: account_name,
+            },
+            unique_id=account_id,
+            title=account_name,
+        )
+
     coordinator = SweTrackCoordinator(hass, entry, api)
     await coordinator.async_config_entry_first_refresh()
 

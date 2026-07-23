@@ -72,6 +72,7 @@ async def async_get_config_entry_diagnostics(
                     else None
                 ),
                 "request_limit": coordinator.request_limit,
+                "request_count": coordinator.request_count,
                 "requests_remaining": coordinator.requests_remaining,
                 "reset_at": coordinator.reset_at,
                 "headers": coordinator.last_headers,
