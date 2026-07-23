@@ -1,0 +1,69 @@
+{
+  "title": "SweTrack",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Koble til SweTrack",
+        "description": "Opprett en ekstern API-n\u00f8kkel i SweTrack-appen eller nettportalen, og lim den inn nedenfor.",
+        "data": {
+          "api_key": "API-n\u00f8kkel"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Koble SweTrack til p\u00e5 nytt",
+        "description": "Skriv inn en ny SweTrack API-n\u00f8kkel.",
+        "data": {
+          "api_key": "API key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke koble til SweTrack",
+      "invalid_auth": "API-n\u00f8kkelen er ugyldig eller utl\u00f8pt"
+    },
+    "abort": {
+      "already_configured": "Denne SweTrack-kontoen er allerede konfigurert",
+      "reauth_successful": "SweTrack er koblet til p\u00e5 nytt"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SweTrack-innstillinger",
+        "description": "Automatisk modus justerer intervallet etter API-kvoten n\u00e5r kvoteinformasjon er tilgjengelig. Fast intervall brukes bare i fast modus.",
+        "data": {
+          "update_mode": "Oppdateringsmodus",
+          "update_interval": "Fast oppdateringsintervall",
+          "enabled_devices": "Aktiverte trackere"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Batteri"
+      },
+      "external_voltage": {
+        "name": "Ekstern spenning"
+      },
+      "speed": {
+        "name": "Hastighet"
+      },
+      "last_seen": {
+        "name": "Sist sett"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Tilkoblet"
+      },
+      "ignition": {
+        "name": "Tenning"
+      },
+      "external_power": {
+        "name": "Ekstern str\u00f8m"
+      }
+    }
+  }
+}

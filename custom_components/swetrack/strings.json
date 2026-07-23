@@ -1,0 +1,69 @@
+{
+  "title": "SweTrack",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to SweTrack",
+        "description": "Create an external API key in the SweTrack app or web portal and paste it below.",
+        "data": {
+          "api_key": "API key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect SweTrack",
+        "description": "Enter a new SweTrack API key.",
+        "data": {
+          "api_key": "API key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to SweTrack",
+      "invalid_auth": "The API key is invalid or expired"
+    },
+    "abort": {
+      "already_configured": "This SweTrack account is already configured",
+      "reauth_successful": "SweTrack was reconnected"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SweTrack settings",
+        "description": "Automatic mode adjusts the interval according to the API quota when quota information is available. The fixed interval field is only used in fixed mode.",
+        "data": {
+          "update_mode": "Update mode",
+          "update_interval": "Fixed update interval",
+          "enabled_devices": "Enabled trackers"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Battery"
+      },
+      "external_voltage": {
+        "name": "External voltage"
+      },
+      "speed": {
+        "name": "Speed"
+      },
+      "last_seen": {
+        "name": "Last seen"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "ignition": {
+        "name": "Ignition"
+      },
+      "external_power": {
+        "name": "External power"
+      }
+    }
+  }
+}
