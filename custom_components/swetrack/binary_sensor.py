@@ -14,6 +14,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers import entity_registry as er
 
 from .const import DOMAIN
 from .coordinator import SweTrackCoordinator
@@ -109,11 +110,50 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     coordinator: SweTrackCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # Remove stale v0.2.6 wake-up entities which were created without first
+    # checking whether that tracker model exposes the capability.
+    _async_remove_stale_optional_entities(hass, entry, coordinator)
+
     async_add_entities(
         SweTrackBinarySensor(coordinator, device_id, description)
-        for device_id in coordinator.data
+        for device_id, device in coordinator.data.items()
         for description in BINARY_SENSORS
+        if device.supports(description.key)
     )
+
+
+OPTIONAL_TRACKER_BINARY_KEYS = {
+    "wake_by_time",
+    "wake_by_vibration",
+    "wake_by_light",
+    "safety_zone",
+}
+
+
+def _async_remove_stale_optional_entities(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    coordinator: SweTrackCoordinator,
+) -> None:
+    """Remove optional entities incorrectly created by v0.2.6."""
+    registry = er.async_get(hass)
+    entries = er.async_entries_for_config_entry(registry, entry.entry_id)
+
+    unsupported_unique_ids = {
+        f"{device_id}_{key}"
+        for device_id, device in coordinator.data.items()
+        for key in OPTIONAL_TRACKER_BINARY_KEYS
+        if not device.supports(key)
+    }
+
+    for registry_entry in entries:
+        if (
+            registry_entry.domain == "binary_sensor"
+            and registry_entry.platform == DOMAIN
+            and registry_entry.unique_id in unsupported_unique_ids
+        ):
+            registry.async_remove(registry_entry.entity_id)
 
 
 class SweTrackBinarySensor(SweTrackEntity, BinarySensorEntity):

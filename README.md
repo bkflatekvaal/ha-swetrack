@@ -67,7 +67,7 @@ logger:
     custom_components.swetrack: debug
 ```
 
-## Version 0.2.6
+## Version 0.2.7
 
 - Added parent API device and `via_device` tracker relationships
 - Added multiple config-entry support
@@ -119,3 +119,11 @@ after the API becomes available again.
 Hardware-dependent temperature, humidity and wake-up settings are exposed when
 reported by the tracker. The account device also includes a cached total event
 count, refreshed at most every 15 minutes to conserve API quota.
+
+
+### Hardware-dependent entities
+
+Tracker entities are created from capabilities actually exposed by
+`/devices/info`. An omitted API field means the entity is not created.
+A field that is present but currently has a null value is still treated as
+supported, so the entity remains available for later readings.

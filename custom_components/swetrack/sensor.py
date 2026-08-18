@@ -23,6 +23,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers import entity_registry as er
 
 from .const import CONF_ACCOUNT_LANGUAGE, CONF_ACCOUNT_NAME, DOMAIN
 from .coordinator import SweTrackCoordinator
@@ -214,16 +215,54 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     coordinator: SweTrackCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # Remove stale v0.2.6 optional entities that were created for trackers
+    # which never exposed those hardware capabilities.
+    _async_remove_stale_optional_entities(hass, entry, coordinator)
+
     entities = [
         SweTrackSensor(coordinator, device_id, description)
-        for device_id in coordinator.data
+        for device_id, device in coordinator.data.items()
         for description in SENSORS
+        if device.supports(description.key)
     ]
     entities.extend(
         SweTrackAccountSensor(coordinator, description)
         for description in ACCOUNT_SENSORS
     )
     async_add_entities(entities)
+
+
+OPTIONAL_TRACKER_SENSOR_KEYS = {
+    "temperature",
+    "humidity",
+    "wake_interval",
+}
+
+
+def _async_remove_stale_optional_entities(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    coordinator: SweTrackCoordinator,
+) -> None:
+    """Remove optional entities incorrectly created by v0.2.6."""
+    registry = er.async_get(hass)
+    entries = er.async_entries_for_config_entry(registry, entry.entry_id)
+
+    unsupported_unique_ids = {
+        f"{device_id}_{key}"
+        for device_id, device in coordinator.data.items()
+        for key in OPTIONAL_TRACKER_SENSOR_KEYS
+        if not device.supports(key)
+    }
+
+    for registry_entry in entries:
+        if (
+            registry_entry.domain == "sensor"
+            and registry_entry.platform == DOMAIN
+            and registry_entry.unique_id in unsupported_unique_ids
+        ):
+            registry.async_remove(registry_entry.entity_id)
 
 
 class SweTrackSensor(SweTrackEntity, SensorEntity):

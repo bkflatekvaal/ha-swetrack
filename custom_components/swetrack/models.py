@@ -62,7 +62,12 @@ class SweTrackDevice:
     wake_by_light: bool | None = None
     safety_zone: bool | None = None
     last_seen: str | None = None
+    supported: frozenset[str] = field(default_factory=frozenset)
     raw: dict[str, Any] = field(default_factory=dict)
+
+    def supports(self, key: str) -> bool:
+        """Return whether this tracker exposes a capability in the API."""
+        return key in self.supported
 
 
 def extract_device_list(payload: Any) -> list[dict[str, Any]]:
@@ -164,6 +169,70 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
     if not isinstance(wake_settings, dict):
         wake_settings = {}
 
+    supported: set[str] = set()
+
+    if "status" in raw:
+        supported.add("online")
+    if isinstance(position, dict):
+        if "latitude" in position or "longitude" in position:
+            supported.add("location")
+        if "datetime" in position or "last_update" in raw:
+            supported.add("last_seen")
+        if "altitude" in position:
+            supported.add("altitude")
+        if "accuracy" in position:
+            supported.add("accuracy")
+        if "heading" in position:
+            supported.add("heading")
+
+    if isinstance(battery_data, dict):
+        if "internal" in battery_data:
+            supported.add("battery")
+        if "external_voltage" in battery_data:
+            supported.add("external_voltage")
+        if "external_power_supply" in battery_data:
+            supported.add("external_power")
+
+    if isinstance(current_speed, dict) and "value" in current_speed:
+        supported.add("speed")
+    if isinstance(speed_limit, dict) and "value" in speed_limit:
+        supported.add("speed_limit")
+
+    if "ignition" in raw and (
+        not isinstance(ignition_data, dict) or "value" in ignition_data
+    ):
+        supported.add("ignition")
+
+    if "relay_switch" in raw and (
+        not isinstance(relay_data, dict) or "value" in relay_data
+    ):
+        supported.add("relay")
+
+    if "powersaving_mode" in raw and (
+        not isinstance(saving_data, dict) or "current" in saving_data
+    ):
+        supported.add("power_saving")
+
+    # temp_hum and wakeup_info are hardware-dependent. Presence of the field,
+    # even with a null value, means the tracker supports the capability.
+    if "temp_hum" in raw and isinstance(current_temp_hum, dict):
+        if "temperature" in current_temp_hum:
+            supported.add("temperature")
+        if "humidity" in current_temp_hum:
+            supported.add("humidity")
+
+    if "wakeup_info" in raw and isinstance(wake_settings, dict):
+        if "wakebytime" in wake_settings:
+            supported.add("wake_by_time")
+        if "wakebytimeinfo" in wake_settings:
+            supported.add("wake_interval")
+        if "wakebyvib" in wake_settings:
+            supported.add("wake_by_vibration")
+        if "wakebylight" in wake_settings:
+            supported.add("wake_by_light")
+        if "safetyzone" in wake_settings:
+            supported.add("safety_zone")
+
     status = raw.get("status")
 
     return SweTrackDevice(
@@ -197,6 +266,7 @@ def normalize_device(raw: dict[str, Any]) -> SweTrackDevice | None:
         wake_by_light=as_bool(wake_settings.get("wakebylight")),
         safety_zone=as_bool(wake_settings.get("safetyzone")),
         last_seen=raw.get("last_update") or position.get("datetime"),
+        supported=frozenset(supported),
         raw=raw,
     )
 

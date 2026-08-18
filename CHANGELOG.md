@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.7
+
+- Create tracker entities only when the capability is exposed by `/devices/info`
+- Distinguish unsupported hardware from a supported sensor with a null/currently unavailable value
+- Temperature and humidity are omitted on trackers without `temp_hum`
+- Wake-up entities are created individually based on the keys exposed in `wakeup_info.current_settings`
+- Ignition, relay, external power/voltage, speed and power-saving entities also respect API capability presence
+- Automatically removes stale optional temperature/humidity/wake-up entities created by v0.2.6
+
 ## 0.2.6
 
 - Renamed external power to `External power connected`
