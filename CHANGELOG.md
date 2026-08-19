@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.8
+
+- Updated `TrackerEntity` to use the supported Home Assistant device tracker import
+
 ## 0.2.7
 
 - Create tracker entities only when the capability is exposed by `/devices/info`
