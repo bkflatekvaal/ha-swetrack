@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
 import logging
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -39,6 +39,9 @@ _LOGGER = logging.getLogger(__name__)
 
 class SweTrackCoordinator(DataUpdateCoordinator[dict[str, SweTrackDevice]]):
     """Coordinate a single API poll for all SweTrack entities."""
+
+    # Set by integration setup before any entity platforms are forwarded.
+    account_device_id: str
 
     def __init__(
         self,

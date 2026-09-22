@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.9
+
+- Register the account device before tracker entities and use its registry ID as `via_device_id`
+- Preserve account/tracker identifiers and entity unique IDs across reloads and reauthentication
+- Add regression tests for account isolation and device registration
+- Require Home Assistant 2026.8 or newer
+
 ## 0.2.8
 
 - Updated `TrackerEntity` to use the supported Home Assistant device tracker import

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -9,9 +10,16 @@ from .const import CONF_ACCOUNT_NAME, DOMAIN
 from .coordinator import SweTrackCoordinator
 
 
-def account_identifier(coordinator: SweTrackCoordinator) -> tuple[str, str]:
-    """Return the identifier for the API account device."""
-    return (DOMAIN, f"account_{coordinator.entry.entry_id}")
+def account_device_info(entry: ConfigEntry) -> DeviceInfo:
+    """Describe the same account device during setup and entity registration."""
+    account_name = entry.data.get(CONF_ACCOUNT_NAME, entry.title)
+    return DeviceInfo(
+        identifiers={(DOMAIN, f"account_{entry.entry_id}")},
+        manufacturer="SweTrack",
+        model="Account",
+        name=f"SweTrack – {account_name}",
+        configuration_url="https://www.swetrack.com/live",
+    )
 
 
 class SweTrackAccountEntity(CoordinatorEntity[SweTrackCoordinator]):
@@ -21,16 +29,7 @@ class SweTrackAccountEntity(CoordinatorEntity[SweTrackCoordinator]):
 
     @property
     def device_info(self) -> DeviceInfo:
-        account_name = self.coordinator.entry.data.get(
-            CONF_ACCOUNT_NAME, self.coordinator.entry.title
-        )
-        return DeviceInfo(
-            identifiers={account_identifier(self.coordinator)},
-            manufacturer="SweTrack",
-            model="Account",
-            name=f"SweTrack – {account_name}",
-            configuration_url="https://www.swetrack.com/live",
-        )
+        return account_device_info(self.coordinator.entry)
 
 
 class SweTrackEntity(CoordinatorEntity[SweTrackCoordinator]):
@@ -63,6 +62,6 @@ class SweTrackEntity(CoordinatorEntity[SweTrackCoordinator]):
             manufacturer="SweTrack",
             model=model,
             name=name,
-            via_device=account_identifier(self.coordinator),
+            via_device_id=self.coordinator.account_device_id,
             configuration_url="https://www.swetrack.com/live",
         )

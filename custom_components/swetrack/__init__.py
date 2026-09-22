@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import issue_registry as ir
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import SweTrackApiClient, SweTrackApiError, SweTrackAuthError
@@ -20,6 +21,7 @@ from .const import (
     PLATFORMS,
 )
 from .coordinator import SweTrackCoordinator
+from .entity import account_device_info
 from .models import derive_account_identity
 
 
@@ -55,6 +57,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     coordinator = SweTrackCoordinator(hass, entry, api)
     await coordinator.async_config_entry_first_refresh()
+
+    # Register the parent before any platform can add tracker entities.
+    account_device = dr.async_get(hass).async_get_or_create(
+        config_entry_id=entry.entry_id,
+        **account_device_info(entry),
+    )
+    coordinator.account_device_id = account_device.id
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))

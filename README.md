@@ -6,6 +6,8 @@
 
 Unofficial Home Assistant integration for SweTrack GPS trackers.
 
+Requires Home Assistant 2026.8 or newer.
+
 ## Features
 
 - GUI setup using a SweTrack external API key
@@ -51,6 +53,19 @@ SweTrack API – account
 
 Adding another API key as a separate config entry creates another independent
 API parent device.
+
+The account device is registered before entity setup. Trackers use its Home
+Assistant registry ID as `via_device_id`; account and tracker identifiers and
+entity unique IDs are unchanged, including across reloads and reauthentication.
+
+## Development validation
+
+Run `python -m unittest discover -s tests -v` for the device registration contract
+tests. These use a registry double and do not require Home Assistant. GitHub
+Actions also runs hassfest and HACS validation. Before release, verify an upgrade
+in Home Assistant with existing devices and two accounts: check parent links,
+retained entity/device IDs and customizations, reload/reauthentication, optional
+capability entities, and the absence of device-registry deprecation warnings.
 
 ## Diagnostics and privacy
 
