@@ -24,6 +24,7 @@ SENSITIVE_KEYS = {
     "serial_number",
     "serialNumber",
     "name",
+    "account_id",
     "account_name",
     "email",
     "latitude",

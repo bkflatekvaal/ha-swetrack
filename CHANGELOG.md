@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.10
+
+- Redact SweTrack account IDs from diagnostics, including config entry data and nested API payloads
+
 ## 0.2.9
 
 - Register the account device before tracker entities and use its registry ID as `via_device_id`
