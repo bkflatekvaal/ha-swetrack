@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.12
+
+- Mask the API key during initial setup and reauthentication using password input fields
+
 ## 0.2.11
 
 - Remove unsupported SVG and redundant dark brand images flagged by the new hassfest brand checks
