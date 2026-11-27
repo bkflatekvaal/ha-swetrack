@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.11
+
+- Remove unsupported SVG and redundant dark brand images flagged by the new hassfest brand checks
+- Allow manual validation runs in addition to push and pull request checks
+- Add the English translation file for the custom integration
+- Update installation instructions for the built-in Marketplace in Home Assistant 2026.11, retaining HACS instructions for 2026.8–2026.10
+- Simplify the README to focus on installation, setup, settings, and support
+
 ## 0.2.10
 
 - Redact SweTrack account IDs from diagnostics, including config entry data and nested API payloads

@@ -1,0 +1,130 @@
+{
+  "title": "SweTrack",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to SweTrack",
+        "description": "Create an external API key in the SweTrack app or web portal and paste it below.",
+        "data": {
+          "api_key": "API key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect SweTrack",
+        "description": "The connection to SweTrack account **{account}** must be renewed. Enter a new API key for the same account.",
+        "data": {
+          "api_key": "API key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to SweTrack",
+      "invalid_auth": "The API key is invalid or expired"
+    },
+    "abort": {
+      "already_configured": "This SweTrack account is already configured",
+      "reauth_successful": "SweTrack was reconnected",
+      "wrong_account": "The API key belongs to a different SweTrack account"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SweTrack settings",
+        "description": "Automatic mode adjusts the interval according to the API quota when quota information is available. The fixed interval field is only used in fixed mode.",
+        "data": {
+          "update_mode": "Update mode",
+          "update_interval": "Fixed update interval",
+          "enabled_devices": "Enabled trackers"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Battery"
+      },
+      "external_voltage": {
+        "name": "External voltage"
+      },
+      "speed": {
+        "name": "Current speed"
+      },
+      "last_seen": {
+        "name": "Last seen"
+      },
+      "speed_limit": {
+        "name": "Speed limit"
+      },
+      "polling_interval": {
+        "name": "Polling interval"
+      },
+      "daily_limit": {
+        "name": "Daily API limit"
+      },
+      "requests_today": {
+        "name": "API requests today"
+      },
+      "remaining": {
+        "name": "API requests remaining"
+      },
+      "reset": {
+        "name": "Quota reset"
+      },
+      "trackers": {
+        "name": "Trackers"
+      },
+      "language": {
+        "name": "Account language"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
+      "wake_interval": {
+        "name": "Wake-up interval"
+      },
+      "events": {
+        "name": "Total events"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "ignition": {
+        "name": "Ignition"
+      },
+      "external_power": {
+        "name": "External power connected"
+      },
+      "power_saving": {
+        "name": "Power saving mode"
+      },
+      "relay": {
+        "name": "Relay"
+      },
+      "wake_by_time": {
+        "name": "Wake by time"
+      },
+      "wake_by_vibration": {
+        "name": "Wake by vibration"
+      },
+      "wake_by_light": {
+        "name": "Wake by light"
+      },
+      "safety_zone": {
+        "name": "Safety zone"
+      }
+    }
+  },
+  "issues": {
+    "api_quota_exhausted": {
+      "title": "SweTrack API quota exhausted",
+      "description": "Home Assistant cannot retrieve new data for SweTrack account **{account}** because the daily API quota has been exhausted. The integration automatically increases the polling interval and will retry later. This issue is removed when the API responds normally."
+    }
+  }
+}

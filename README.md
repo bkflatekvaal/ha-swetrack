@@ -4,141 +4,70 @@
 
 # SweTrack for Home Assistant
 
-Unofficial Home Assistant integration for SweTrack GPS trackers.
+Follow your SweTrack GPS trackers in Home Assistant. This unofficial integration
+supports multiple accounts and is available in English and Norwegian Bokmål.
 
-Requires Home Assistant 2026.8 or newer.
+Requires Home Assistant 2026.8 or newer and a SweTrack external API key.
 
 ## Features
 
-- GUI setup using a SweTrack external API key
-- Multiple SweTrack accounts/config entries
-- One parent **SweTrack API** device per config entry
-- Trackers shown as connected devices below their API account
-- GPS device tracker
-- Battery, external voltage, speed, speed limit and last-seen sensors
-- Online, ignition, external-power, power-saving and relay status
-- API quota and polling diagnostics
-- Automatic or fixed polling interval
-- Options flow for enabling/disabling trackers
-- Reauthentication and privacy-preserving diagnostics
-- Local Home Assistant/HACS brand assets
-- Norwegian and English translations
+- Show tracker locations on the map.
+- Monitor battery, speed, last seen, and connection status.
+- View additional readings, such as ignition, external power, temperature, and
+  humidity, when supported by your tracker.
+- Keep track of API usage and choose automatic or fixed update intervals.
 
-## Installation with HACS custom repository
+Available sensors depend on the tracker model and the data SweTrack provides.
 
-1. Open HACS → Integrations.
-2. Open the menu → Custom repositories.
-3. Add:
-   `https://github.com/bkflatekvaal/ha-swetrack`
-4. Select category **Integration**.
-5. Install SweTrack.
-6. Restart Home Assistant.
-7. Go to Settings → Devices & services → Add integration → SweTrack.
+## Installation
 
-## API key
+### Marketplace (Home Assistant 2026.11+)
 
-The integration uses a SweTrack Bearer API key. It does not require or store
-your SweTrack username/password.
+Marketplace replaces HACS in Home Assistant 2026.11.
 
-## Device hierarchy
+1. Open **Settings > Marketplace** as an administrator.
+2. Select **Add from link** and connect GitHub if prompted.
+3. Enter `https://github.com/bkflatekvaal/ha-swetrack` and select **Add**.
+4. Open **SweTrack** and select **Install**. If asked for a type, select **Integration**.
+5. Follow the setup prompt and restart Home Assistant if requested.
 
-Each config entry creates one parent API device:
+If you already installed SweTrack through HACS, it moves to Marketplace when you
+upgrade Home Assistant. You do not need to reinstall it.
 
-```text
-SweTrack API – account
-├── Tracker 1
-├── Tracker 2
-└── Tracker 3
-```
+### HACS (Home Assistant 2026.8–2026.10)
 
-Adding another API key as a separate config entry creates another independent
-API parent device.
+In HACS, open **Custom repositories** from the menu. Add
+`https://github.com/bkflatekvaal/ha-swetrack` with type **Integration**, install
+SweTrack, and restart Home Assistant.
 
-The account device is registered before entity setup. Trackers use its Home
-Assistant registry ID as `via_device_id`; account and tracker identifiers and
-entity unique IDs are unchanged, including across reloads and reauthentication.
+## Setup
 
-## Development validation
+1. Create an external API key in the SweTrack app or web portal.
+2. In Home Assistant, open **Settings > Devices & services > Add integration**
+   and select **SweTrack** if setup has not already opened.
+3. Paste your API key and complete setup.
 
-Run `python -m unittest discover -s tests -v` for the device registration contract
-tests. These use a registry double and do not require Home Assistant. GitHub
-Actions also runs hassfest and HACS validation. Before release, verify an upgrade
-in Home Assistant with existing devices and two accounts: check parent links,
-retained entity/device IDs and customizations, reload/reauthentication, optional
-capability entities, and the absence of device-registry deprecation warnings.
+Your SweTrack username and password are not required. To add another account,
+repeat setup with that account's API key. Trackers are grouped under their account.
 
-## Diagnostics and privacy
+## Settings and updates
 
-Diagnostics redact API credentials, cookies, account/tracker names, device
-identifiers, IMEI/unique IDs, groups and GPS coordinates. Always review a
-diagnostics file before publishing it publicly.
+Open SweTrack under **Settings > Devices & services** to choose which trackers
+are enabled and adjust the update interval.
 
-## Debug logging
+Automatic mode adjusts the interval based on the available API quota. Fixed mode
+uses your chosen interval. Data is checked periodically, so location changes are
+not instant.
 
-```yaml
-logger:
-  default: info
-  logs:
-    custom_components.swetrack: debug
-```
+If the daily API quota is exhausted, Home Assistant shows a Repairs notification.
+The integration reduces its request frequency and retries automatically. If an
+API key expires, follow the Home Assistant prompt to enter a replacement key for
+the same account.
 
-## Version 0.2.7
+## Help
 
-- Added parent API device and `via_device` tracker relationships
-- Added multiple config-entry support
-- Added API usage sensors
-- Added local brand assets supplied by the repository owner
-- Added entity icons and model generation detection
-- Refreshed documentation
-- Added repository-level HACS brand assets
-- Read account username from `/account/info`
-- Changed device configuration link to SweTrack Live
+Report problems in [GitHub Issues](https://github.com/bkflatekvaal/ha-swetrack/issues).
+Include your Home Assistant and integration versions and describe what happened.
+Never share your API key. Review any diagnostic files before sharing them.
 
-
-## Data updates
-
-Version 0.2.1 uses REST polling through `/devices/info`. It does not register a
-webhook. SweTrack webhooks may be considered later as an optional mode for
-accounts where SweTrack support has enabled push delivery and Home Assistant
-has a securely reachable external URL.
-
-
-### Account device
-
-The account device uses short diagnostic names such as `Daily limit`,
-`Requests today`, `Remaining`, `Reset`, `Polling interval`, `Trackers` and
-`Language`.
-
-
-### Branding notes
-
-Home Assistant loads local brand assets from
-`custom_components/swetrack/brand/`, including light and dark variants.
-The README uses an absolute raw GitHub PNG URL for compatibility with both
-GitHub and HACS rendering.
-
-
-### Reauthentication and Repairs
-
-Invalid or expired API keys automatically start a Home Assistant
-reauthentication flow. The replacement key is validated against both the
-account and devices endpoints and must belong to the same SweTrack account.
-
-If the daily SweTrack API quota is exhausted, Home Assistant creates a
-Repairs issue. The integration backs off automatically and removes the issue
-after the API becomes available again.
-
-
-### Additional device data
-
-Hardware-dependent temperature, humidity and wake-up settings are exposed when
-reported by the tracker. The account device also includes a cached total event
-count, refreshed at most every 15 minutes to conserve API quota.
-
-
-### Hardware-dependent entities
-
-Tracker entities are created from capabilities actually exposed by
-`/devices/info`. An omitted API field means the entity is not created.
-A field that is present but currently has a null value is still treated as
-supported, so the entity remains available for later readings.
+See the [changelog](CHANGELOG.md) for release notes.
